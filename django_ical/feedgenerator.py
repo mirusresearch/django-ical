@@ -27,7 +27,7 @@ For definitions of the iCalendar format see:
 http://www.ietf.org/rfc/rfc2445.txt
 """
 
-from icalendar import Calendar, Event, Todo
+from icalendar import Calendar, Event, Todo, Journal, FreeBusy
 
 from django.utils.feedgenerator import SyndicationFeed
 
@@ -99,6 +99,7 @@ ITEM_ELEMENT_FIELD_MAP = (
     ("request_status", "request-status"),
 )
 
+
 class ICal20Feed(SyndicationFeed):
     """
     iCalendar 2.0 Feed implementation.
@@ -135,6 +136,10 @@ class ICal20Feed(SyndicationFeed):
             component_type = item.get("component_type")
             if component_type == "todo":
                 element = Todo()
+            elif component_type == "journal":
+                element = Journal()
+            elif component_type == "freebusy":
+                element = FreeBusy()
             else:
                 element = Event()
             for ifield, efield in ITEM_ELEMENT_FIELD_MAP:
